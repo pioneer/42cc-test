@@ -8,8 +8,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^welcometo42cc/', include('welcometo42cc.foo.urls')),
+     (r'^$', 'common.views.homepage'),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

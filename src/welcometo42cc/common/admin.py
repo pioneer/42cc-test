@@ -4,4 +4,3 @@ from django.contrib import admin
 UserAdmin.fieldsets += (
     ('Extra info', {'fields': ('biography', 'birthdate', 'contacts')}),
     )
-

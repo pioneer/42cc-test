@@ -93,6 +93,22 @@ INSTALLED_APPS = (
     'common',
 )
 
+TEST_RUNNER = 'django-test-coverage.runner.run_tests'
+
+# Dependency checker functionality.  Gives our users nice errors when they start
+# out, instead of encountering them later on.  Most of the magic for this
+# happens in manage.py, not here.
+install_help = """
+Please see installation instruction
+for help setting up the application.
+"""
+
+def dependency_error(string):
+    import sys
+    sys.stderr.write('%s\n' % string)
+    sys.stderr.write(install_help)
+    sys.exit(1)
+
 # Load local settings.  This can override anything in here, but at the very
 # least it needs to define database connectivity.
 try:

@@ -6,7 +6,7 @@
 |                                                                                                    |
 +-------------------------------------------------+--------------------------------------------------+
 |                                                 |                                                  |
-|   TYPOGRIDPHY IS © COPYRIGHT OF HARRY ROBERTS   |   v 0.1.1                                        |
+|   TYPOGRIDPHY IS ï¿½ COPYRIGHT OF HARRY ROBERTS   |   v 0.1.1                                        |
 |   IT IS FREE TO BE USED AND MODIFIED PROVIDED   |   May 2008                                       |
 |   THIS TEXT REMAINS INTACT -- CSSWIZARDRY.COM   |   http://csswizardry.com                         |
 |                                                 |                                                  |
@@ -70,7 +70,7 @@ body{
 	font-size:62.5%;
 	font-family:Georgia, "Times New Roman", serif;
 	color:#666;
-	background:/*url(images/grid.gif) top center repeat-y*/ #fff; /* Uncomment to display the grid */
+	background:/*url(/static/images/grid.gif) top center repeat-y*/ #fff; /* Uncomment to display the grid */
 	border-top:0.5em solid #666;
 	padding:0 1em;
 }
