@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h3>Name</h3>
+<p>{{ user.get_full_name }}</p>
+<h3>Date of Birth</h3>
+<p>{{ user.birthdate|date:"d M Y" }}</p>
+<h3>Biography</h3>
+<p>{{ user.biography }}</p>
+<h3>E-mail</h3>
+<p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+<h3>Contacts</h3>
+<p>{{ user.contacts }}</p>
+{% endblock %}
