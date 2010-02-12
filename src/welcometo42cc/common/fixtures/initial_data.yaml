@@ -1,0 +1,20 @@
+- fields:
+    biography: Pinocchio is a fictional character that first appeared in 1883, in
+      The Adventures of Pinocchio by Carlo Collodi.
+    birthdate: 1980-06-15
+    contacts: 'Cell phone: +380-63-192-4340'
+    date_joined: 2010-02-10 01:11:55
+    email: serge.tarkovski@gmail.com
+    first_name: Serge
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: 2010-02-10 01:13:10
+    last_name: Tarkovski
+    password: sha1$92f26$17f4af7f8a7ce4845f09161d8666f39c7ae49d30
+    user_permissions: []
+    username: pioneer
+  model: auth.user
+  pk: 1
+

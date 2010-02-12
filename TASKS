@@ -1,0 +1,12 @@
+2010.02.09 #1   Set up github repository                                22:31 - 22:48
+                Register at reviework.com                               22:49 - 23:07
+                Git docs reading                                        23:23 - 23:26
+                Set up new eclipse project                              23:26 - 23:45
+                Set up initial project directory and file structure     23:45 - 1:05
+2010.02.10      Create a test for ticket #1                             9:48 - 11:05
+                Find out suitable template, place it in file layout     23:01 - 23:36
+                Add libraries, create a view, fill templates            23:37 - 00:06
+2010.02.11      Ensure test is working                                  00:07 - 00:10
+                Fix CSS, fix 404 template                               00:45 - 00:55
+                Add test coverage lib, fix pep8/pylint issues           00:56 - 01:15
+2010.02.12      CR fixes                                                10:55 - 11:00
