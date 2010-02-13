@@ -12,7 +12,7 @@
     is_superuser: true
     last_login: 2010-02-10 01:13:10
     last_name: Tarkovski
-    password: sha1$92f26$17f4af7f8a7ce4845f09161d8666f39c7ae49d30
+    password: sha1$64e8f$b1c51a546bf9e08a0913896670a0721111b29c89
     user_permissions: []
     username: pioneer
   model: auth.user
