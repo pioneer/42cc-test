@@ -2,13 +2,13 @@
 
 {% block content %}
 <h3>Name</h3>
-<p>{{ user.get_full_name }}</p>
+<p>{{ u.get_full_name }}</p>
 <h3>Date of Birth</h3>
-<p>{{ user.birthdate|date:"d M Y" }}</p>
+<p>{{ u.birthdate|date:"d M Y" }}</p>
 <h3>Biography</h3>
-<p>{{ user.biography }}</p>
+<p>{{ u.biography }}</p>
 <h3>E-mail</h3>
-<p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+<p><a href="mailto:{{ user.email }}">{{ u.email }}</a></p>
 <h3>Contacts</h3>
-<p>{{ user.contacts }}</p>
+<p>{{ u.contacts }}</p>
 {% endblock %}

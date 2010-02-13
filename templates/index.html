@@ -10,7 +10,16 @@
 <body>
 	<div id="wrapper">
 		<div id="header">
-			<span id="nav"><a href="/" title="Homepage">Homepage</a> <!-- &middot; <a href="#" title="Nav Item Title">Other Pages Go Here</a></span> -->
+			<span id="nav"><a href="/" title="Homepage">Homepage</a>
+			<!-- &middot; <a href="#" title="Nav Item Title">Other Pages Go Here</a> -->
+			<span>
+				{% if user.is_authenticated %}
+				Logged in as <b>{{ user.username }}</b> | <a href="{% url logout %}">Logout</a>
+				{% else %}
+				<a href="{% url login %}">Login</a>
+				{% endif %}
+			</span>
+			</span>
 		</div>
 		<div class="generic nineforty">
 			<h1>42 Coffee Cups &mdash; Test Project.</h1>
