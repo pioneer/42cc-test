@@ -10,12 +10,15 @@ User.add_to_class('contacts', models.TextField(max_length=400, blank=True))
 
 
 class HttpRequestLogRecord(models.Model):
+    """
+    A representation of HTTP request log record
+    """
     url = models.CharField(max_length=255)
     method = models.CharField(max_length=4)
     status_code = models.IntegerField()
     datetime = models.DateTimeField(auto_now_add=True)
-    
+
     objects = HttpRequestLogRecordManager()
-    
+
     def __unicode__(self):
         return self.url

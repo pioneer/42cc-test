@@ -1,10 +1,15 @@
 from common.models import HttpRequestLogRecord
 
-from django.http import HttpResponse
 
 class HttpLoggerMiddleware(object):
-    
+    """
+    Middleware to log all HTTP requests in database
+    """
+
     def process_response(self, request, response):
+        """
+        Creates a log record for every HTTP request
+        """
         HttpRequestLogRecord.objects.create(url=request.get_full_path(), \
                                             method=request.method, \
                                             status_code=response.status_code)
