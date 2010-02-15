@@ -8,6 +8,7 @@ UserAdmin.fieldsets += (
     ('Extra info', {'fields': ('biography', 'birthdate', 'contacts')}),
     )
 
+
 class HttpRequestLogRecordAdmin(admin.ModelAdmin):
     list_display = ('url', 'status_code', 'datetime')
 

@@ -79,6 +79,7 @@ MIDDLEWARE_CLASSES = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.auth",
+    "common.context_processors.settings_vars",
 )
 
 
@@ -109,6 +110,7 @@ install_help = """
 Please see installation instruction
 for help setting up the application.
 """
+
 
 def dependency_error(string):
     import sys
