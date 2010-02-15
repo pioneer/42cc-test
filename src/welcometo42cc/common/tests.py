@@ -85,3 +85,16 @@ class WelcomeTo42CcTest(unittest.TestCase):
         self.failUnlessEqual(record.url, "/logout/")
         self.failUnlessEqual(record.method, "GET")
         self.failUnlessEqual(record.status_code, 302)
+    
+    def test_context(self):
+        response = self.client.get('/login/')
+        
+        # context does not allow to use just 'xxx' in var syntax
+        try:
+            settings = response.context['settings']
+        except KeyError:
+            settings = None
+        
+        self.failIfEqual(settings, None)
+        self.failUnlessEqual(settings.SECRET_KEY, "(##miaswe4+szpto%a9jku&b+=5v1y@63r%y%i37qk97hzvlzn")
+        self.failUnlessEqual(settings.ROOT_URLCONF, "welcometo42cc.urls")
