@@ -3,6 +3,8 @@ import unittest
 from django.conf import settings
 from django.test.client import Client
 
+from common.models import HttpRequestLogRecord
+
 
 class WelcomeTo42CcTest(unittest.TestCase):
     def setUp(self):
@@ -45,3 +47,41 @@ class WelcomeTo42CcTest(unittest.TestCase):
         response = self.client.get('/login/')
         self.failUnlessEqual(response.status_code, 200)
         self.assertTrue(response.context['user'].is_anonymous)
+    
+    def test_middleware(self):
+        self.client.logout()
+        
+        response = self.client.get('/')
+        
+        record = HttpRequestLogRecord.objects.get_last_record()
+        self.failUnlessEqual(record.url, "/")
+        self.failUnlessEqual(record.method, "GET")
+        self.failUnlessEqual(record.status_code, 302)
+        
+        response = self.client.get('/login/')
+        
+        record = HttpRequestLogRecord.objects.get_last_record()
+        self.failUnlessEqual(record.url, "/login/")
+        self.failUnlessEqual(record.method, "GET")
+        self.failUnlessEqual(record.status_code, 200)
+        
+        response = self.client.post('/login/', {'username': 'pioneer', 'password': '123456'})
+        
+        record = HttpRequestLogRecord.objects.get_last_record()
+        self.failUnlessEqual(record.url, "/login/")
+        self.failUnlessEqual(record.method, "POST")
+        self.failUnlessEqual(record.status_code, 302)
+        
+        response = self.client.get('/')
+        
+        record = HttpRequestLogRecord.objects.get_last_record()
+        self.failUnlessEqual(record.url, "/")
+        self.failUnlessEqual(record.method, "GET")
+        self.failUnlessEqual(record.status_code, 200)
+        
+        response = self.client.get('/logout/')
+        
+        record = HttpRequestLogRecord.objects.get_last_record()
+        self.failUnlessEqual(record.url, "/logout/")
+        self.failUnlessEqual(record.method, "GET")
+        self.failUnlessEqual(record.status_code, 302)
