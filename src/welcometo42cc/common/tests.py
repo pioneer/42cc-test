@@ -92,7 +92,7 @@ class WelcomeTo42CcTest(unittest.TestCase):
 
     def test_context(self):
         response = self.client.get('/login/')
-        
+
         # context does not allow to use just 'xxx' in var syntax
         try:
             settings = response.context['settings']
@@ -102,3 +102,27 @@ class WelcomeTo42CcTest(unittest.TestCase):
         self.failIfEqual(settings, None)
         self.failUnlessEqual(settings.SECRET_KEY, "(##miaswe4+szpto%a9jku&b+=5v1y@63r%y%i37qk97hzvlzn")
         self.failUnlessEqual(settings.ROOT_URLCONF, "welcometo42cc.urls")
+
+    def test_form(self):
+        self.client.logout()
+        response = self.client.get('/form/')
+        self.failUnlessEqual(response.status_code, 302)
+
+        self.client.login(username='pioneer', password='123456')
+        response = self.client.get('/form/')
+        self.failUnlessEqual(response.status_code, 200)
+
+        response = self.client.post('/form/', {'first_name': 'Vasya', \
+                                               'last_name': 'Pupkin', \
+                                               'birthdate': '1970-01-01', \
+                                               'biography': 'The ancestor of the Pupkin\'s genus was a viking jarl Pupkur, who came to Russia in ancient times.', \
+                                               'email': 'pupkin@pupkin.ru', \
+                                               'contacts': 'Use rails'})
+        self.failUnlessEqual(response.status_code, 200)
+
+        response = self.client.get('/')
+        self.assertTrue("Vasya Pupkin" in response.content)
+        self.assertTrue("pupkin@pupkin.ru" in response.content)
+        self.assertTrue("Use rails" in response.content)
+        self.assertTrue("The ancestor of the Pupkin's genus" in response.content)
+        self.assertTrue("1 Jan 1970" in response.content)
