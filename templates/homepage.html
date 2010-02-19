@@ -1,6 +1,9 @@
 {% extends "index.html" %}
 
 {% block content %}
+<p>
+<a href="{% url userform %}">Edit this info</a>
+</p>
 <h3>Name</h3>
 <p>{{ u.get_full_name }}</p>
 <h3>Date of Birth</h3>
