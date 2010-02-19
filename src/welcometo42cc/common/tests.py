@@ -118,11 +118,31 @@ class WelcomeTo42CcTest(unittest.TestCase):
                                                'biography': 'The ancestor of the Pupkin\'s genus was a viking jarl Pupkur, who came to Russia in ancient times.', \
                                                'email': 'pupkin@pupkin.ru', \
                                                'contacts': 'Use rails'})
-        self.failUnlessEqual(response.status_code, 200)
+        self.failUnlessEqual(response.status_code, 302)
 
         response = self.client.get('/')
         self.assertTrue("Vasya Pupkin" in response.content)
         self.assertTrue("pupkin@pupkin.ru" in response.content)
         self.assertTrue("Use rails" in response.content)
-        self.assertTrue("The ancestor of the Pupkin's genus" in response.content)
+        self.assertTrue("The ancestor of the Pupkin" in response.content)
         self.assertTrue("1 Jan 1970" in response.content)
+
+        response = self.client.post('/form/', {'first_name': '', \
+                                               'last_name': 'Pupkin', \
+                                               'birthdate': '1970-01-012', \
+                                               'biography': '', \
+                                               'email': 'pupkin@', \
+                                               'contacts': ''})
+        self.failUnlessEqual(response.status_code, 200)
+        self.assertTrue("This field is required" in response.content)
+        self.assertTrue("Enter a valid date" in response.content)
+        self.assertTrue("Enter a valid e-mail address" in response.content)
+
+        # Roll back to initial data
+        response = self.client.post('/form/', {'first_name': 'Serge', \
+                                               'last_name': 'Tarkovski', \
+                                               'birthdate': '1980-06-15', \
+                                               'biography': 'Pinocchio is a fictional character that first appeared in 1883, in The Adventures of Pinocchio by Carlo Collodi.', \
+                                               'email': 'serge.tarkovski@gmail.com', \
+                                               'contacts': 'Cell phone: +380-63-192-4340'})
+        self.failUnlessEqual(response.status_code, 302)
