@@ -5,6 +5,32 @@ from django.test.client import Client
 
 from common.models import HttpRequestLogRecord
 
+import html5lib
+from html5lib import treebuilders, treewalkers, serializer
+from html5lib.filters import sanitizer
+
+
+def html5_parse_and_get_form_tags(s):
+    """
+    Parses HTML page and extracts form tags from it
+    """
+    p = html5lib.HTMLParser(tree=treebuilders.getTreeBuilder("dom"))
+    dom_tree = p.parse(s)
+    walker = treewalkers.getTreeWalker("dom")
+    stream = walker(dom_tree)
+    s = serializer.htmlserializer.HTMLSerializer(omit_optional_tags=False)
+    tags = s.serialize(stream)
+
+    form_tags = []
+
+    for tag in tags:
+        if any(tag.startswith(s) for s in ("<form", "</form", "<input")):
+            form_tags.append(tag)
+        if tag.startswith("<textarea"):
+            form_tags.append("%s%s%s" % (tag, tags.next(), tags.next()))
+    
+    return form_tags
+
 
 class WelcomeTo42CcTest(unittest.TestCase):
     """
@@ -111,6 +137,34 @@ class WelcomeTo42CcTest(unittest.TestCase):
         self.client.login(username='pioneer', password='123456')
         response = self.client.get('/form/')
         self.failUnlessEqual(response.status_code, 200)
+
+        form_tags = html5_parse_and_get_form_tags(response.content)
+
+        self.assertTrue(form_tags[0].startswith("<form"))
+        self.assertTrue(form_tags[-1] == "</form>")
+        self.assertFalse(any(t.startswith("<form") for t in form_tags[1:-1]))
+        self.assertFalse(any(t == "</form>" for t in form_tags[1:-1]))
+
+        self.assertTrue("action=/form/" in form_tags[0] or "action=." in form_tags[0])
+
+        def is_input(tag, name, value):
+            return tag.startswith("<input") and "name=%s" % name in tag \
+                   and "type=text" in tag \
+                   and "value=%s" % value in tag
+
+        def is_textarea(tag, name, value):
+            return tag.startswith("<textarea") and tag.endswith("</textarea>") \
+                   and "name=%s" % name in tag and value in tag
+
+        def form_tag_check(f, name, value):
+            return any(f(t, name, value) for t in form_tags[1:-1])
+
+        self.assertTrue(form_tag_check(is_input, "first_name", "Serge"))
+        self.assertTrue(form_tag_check(is_input, "last_name", "Tarkovski"))
+        self.assertTrue(form_tag_check(is_input, "birthdate", "1980-06-15"))
+        self.assertTrue(form_tag_check(is_textarea, "biography", "Pinocchio is a fictional character that"))
+        self.assertTrue(form_tag_check(is_input, "email", "serge.tarkovski@gmail.com"))
+        self.assertTrue(form_tag_check(is_textarea, "contacts", "Cell phone: +380-63-192-4340"))
 
         response = self.client.post('/form/', {'first_name': 'Vasya', \
                                                'last_name': 'Pupkin', \
