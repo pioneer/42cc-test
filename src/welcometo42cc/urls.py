@@ -21,10 +21,9 @@ urlpatterns = patterns('',
      (r'^admin/', include(admin.site.urls)),
 )
 
-# static urls will be disabled in production mode,
-if settings.DEBUG:
-    urlpatterns += patterns(
-        '',
-        url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-        url(r'^admin-media/(.*)$', 'django.views.static.serve', {'document_root': op.join(op.dirname(admin.__file__), 'media')}),
-        )
+# static urls will be disabled in production mode
+urlpatterns += patterns(
+    '',
+    url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+    url(r'^admin-media/(.*)$', 'django.views.static.serve', {'document_root': op.join(op.dirname(admin.__file__), 'media')}),
+)
