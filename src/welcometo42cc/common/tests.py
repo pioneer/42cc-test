@@ -200,3 +200,11 @@ class WelcomeTo42CcTest(unittest.TestCase):
                                                'email': 'serge.tarkovski@gmail.com', \
                                                'contacts': 'Cell phone: +380-63-192-4340'})
         self.failUnlessEqual(response.status_code, 302)
+
+import os
+from windmill.authoring import djangotest 
+
+class TestProjectWindmillTest(djangotest.WindmillDjangoUnitTest):
+    test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wmtests')
+    browser = 'firefox'
+
