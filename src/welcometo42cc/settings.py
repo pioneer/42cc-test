@@ -99,6 +99,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'common',
+    'windmill'
 )
 
 TEST_RUNNER = 'django-test-coverage.runner.run_tests'
