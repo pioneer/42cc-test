@@ -198,6 +198,28 @@ class WelcomeTo42CcTest(unittest.TestCase):
                                                'contacts': 'Cell phone: +380-63-192-4340'})
         self.failUnlessEqual(response.status_code, 302)
 
+    def test_edit_user(self):
+        import_edit_tag = True
+        try:
+            from common.templatetags.edit_tags import edit_user
+        except ImportError:
+            import_edit_tag = False
+        self.assertTrue(import_edit_tag)
+        
+        response = self.client.get('/')
+        self.failUnlessEqual(response.status_code, 302)
+
+        self.client.login(username='pioneer', password='123456')
+        response = self.client.get('/')
+        
+        from django.template.loaders.filesystem import load_template_source
+        
+        template_content = load_template_source(response.template[0].name)[0]
+        
+        self.assertTrue("{% load edit_tags %}" in template_content)
+        self.assertTrue("{% edit_user u %}" in template_content)
+        self.assertTrue("/admin/auth/user/1/" in response.content)
+
 import os
 from windmill.authoring import djangotest 
 
