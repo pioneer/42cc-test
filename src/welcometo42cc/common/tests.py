@@ -129,7 +129,7 @@ class WelcomeTo42CcTest(unittest.TestCase):
         self.failUnlessEqual(settings.SECRET_KEY, "(##miaswe4+szpto%a9jku&b+=5v1y@63r%y%i37qk97hzvlzn")
         self.failUnlessEqual(settings.ROOT_URLCONF, "welcometo42cc.urls")
 
-    def test_form(self):
+    def test_form_and_reverse_order(self):
         self.client.logout()
         response = self.client.get('/form/')
         self.failUnlessEqual(response.status_code, 302)
@@ -156,15 +156,12 @@ class WelcomeTo42CcTest(unittest.TestCase):
             return tag.startswith("<textarea") and tag.endswith("</textarea>") \
                    and "name=%s" % name in tag and value in tag
 
-        def form_tag_check(f, name, value):
-            return any(f(t, name, value) for t in form_tags[1:-1])
-
-        self.assertTrue(form_tag_check(is_input, "first_name", "Serge"))
-        self.assertTrue(form_tag_check(is_input, "last_name", "Tarkovski"))
-        self.assertTrue(form_tag_check(is_input, "birthdate", "1980-06-15"))
-        self.assertTrue(form_tag_check(is_textarea, "biography", "Pinocchio is a fictional character that"))
-        self.assertTrue(form_tag_check(is_input, "email", "serge.tarkovski@gmail.com"))
-        self.assertTrue(form_tag_check(is_textarea, "contacts", "Cell phone: +380-63-192-4340"))
+        self.assertTrue(is_input(form_tags[6], "first_name", "Serge"))
+        self.assertTrue(is_input(form_tags[5], "last_name", "Tarkovski"))
+        self.assertTrue(is_input(form_tags[4], "birthdate", "1980-06-15"))
+        self.assertTrue(is_textarea(form_tags[3], "biography", "Pinocchio is a fictional character that"))
+        self.assertTrue(is_input(form_tags[2], "email", "serge.tarkovski@gmail.com"))
+        self.assertTrue(is_textarea(form_tags[1], "contacts", "Cell phone: +380-63-192-4340"))
 
         response = self.client.post('/form/', {'first_name': 'Vasya', \
                                                'last_name': 'Pupkin', \
