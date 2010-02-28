@@ -9,6 +9,14 @@ import html5lib
 from html5lib import treebuilders, treewalkers, serializer
 from html5lib.filters import sanitizer
 
+import os
+from windmill.authoring import djangotest
+
+from django.core.management import call_command
+
+import sys
+import StringIO
+
 
 def html5_parse_and_get_form_tags(s):
     """
@@ -220,10 +228,39 @@ class WelcomeTo42CcTest(unittest.TestCase):
         self.assertTrue("{% edit_user u %}" in template_content)
         self.assertTrue("/admin/auth/user/1/" in response.content)
 
-import os
-from windmill.authoring import djangotest 
+    def test_command(self):
+        saveout = sys.stdout
+        capturedout = StringIO.StringIO()
+        sys.stdout = capturedout
+
+        call_command("model_stats")
+
+        sys.stdout = saveout
+        output = capturedout.getvalue()
+
+        MODEL_STATS_OUTPUT = ["model: ContentType, objects in database: 9",
+                             "model: Permission, objects in database: 27",
+                             "model: Group, objects in database: 0",
+                             "model: Message, objects in database: 0",
+                             "model: Site, objects in database: 1",
+                             "model: LogEntry, objects in database: 0",
+                             "model: HttpRequestLogRecord, objects in database: 0"]
+        
+        MODEL_STATS_OUTPUT_VARIANT = [("model: User, objects in database: 1",
+                                       "model: User, objects in database: 10"),
+                                      ("model: Session, objects in database: 0",
+                                       "model: Session, objects in database: 3")]
+
+        for line in MODEL_STATS_OUTPUT:
+            self.assertTrue(line in output)
+        
+        for items in MODEL_STATS_OUTPUT_VARIANT:
+            self.assertTrue(any(line in output for line in items))
+
 
 class TestProjectWindmillTest(djangotest.WindmillDjangoUnitTest):
+    """
+    Windmill tests for the project
+    """
     test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wmtests')
     browser = 'firefox'
-
