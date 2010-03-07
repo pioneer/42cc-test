@@ -238,8 +238,8 @@ class WelcomeTo42CcTest(unittest.TestCase):
         sys.stdout = saveout
         output = capturedout.getvalue()
 
-        MODEL_STATS_OUTPUT = ["model: ContentType, objects in database: 9",
-                             "model: Permission, objects in database: 27",
+        MODEL_STATS_OUTPUT = ["model: ContentType, objects in database: 10",
+                             "model: Permission, objects in database: 30",
                              "model: Group, objects in database: 0",
                              "model: Message, objects in database: 0",
                              "model: Site, objects in database: 1",
@@ -249,7 +249,9 @@ class WelcomeTo42CcTest(unittest.TestCase):
         MODEL_STATS_OUTPUT_VARIANT = [("model: User, objects in database: 1",
                                        "model: User, objects in database: 10"),
                                       ("model: Session, objects in database: 0",
-                                       "model: Session, objects in database: 3")]
+                                       "model: Session, objects in database: 3"),
+                                      ("model: ModelLog, objects in database: 42",
+                                       "model: ModelLog, objects in database: 60")]
 
         for line in MODEL_STATS_OUTPUT:
             self.assertTrue(line in output)
