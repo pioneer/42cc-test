@@ -36,3 +36,7 @@
                 Implement template tag                                  0:31 - 0:54
 2010.02.20 #9   Create test                                             22:30 - 23:03
                 Implement custom command                                23:04 - 0:00
+2010.03.04 #10  Create model, add it to admin                           10:37 - 11:47
+2010.03.06      Create failing test                                     12:03 - 12:33
+2010.03.07      Add signals                                             23:13 - 0:01
+                Fix command test, debugging signals                     0:02 - 0:39

@@ -3,7 +3,7 @@ import unittest
 from django.conf import settings
 from django.test.client import Client
 
-from common.models import HttpRequestLogRecord
+from common.models import HttpRequestLogRecord, User, ModelLog
 
 import html5lib
 from html5lib import treebuilders, treewalkers, serializer
@@ -238,8 +238,8 @@ class WelcomeTo42CcTest(unittest.TestCase):
         sys.stdout = saveout
         output = capturedout.getvalue()
 
-        MODEL_STATS_OUTPUT = ["model: ContentType, objects in database: 9",
-                             "model: Permission, objects in database: 27",
+        MODEL_STATS_OUTPUT = ["model: ContentType, objects in database: 10",
+                             "model: Permission, objects in database: 30",
                              "model: Group, objects in database: 0",
                              "model: Message, objects in database: 0",
                              "model: Site, objects in database: 1",
@@ -249,13 +249,36 @@ class WelcomeTo42CcTest(unittest.TestCase):
         MODEL_STATS_OUTPUT_VARIANT = [("model: User, objects in database: 1",
                                        "model: User, objects in database: 10"),
                                       ("model: Session, objects in database: 0",
-                                       "model: Session, objects in database: 3")]
+                                       "model: Session, objects in database: 3"),
+                                      ("model: ModelLog, objects in database: 42",
+                                       "model: ModelLog, objects in database: 60")]
 
         for line in MODEL_STATS_OUTPUT:
             self.assertTrue(line in output)
         
         for items in MODEL_STATS_OUTPUT_VARIANT:
             self.assertTrue(any(line in output for line in items))
+
+    def test_signals(self):
+        user = User.objects.create_user("zeus", "thunderbolt@olympus.heaven", "chronos")
+        modellog_record = ModelLog.objects.latest('datetime')
+        self.assertTrue(modellog_record.content_object, user)
+
+        user.biography = "Zeus was the child of Cronus and Rhea, and the youngest of his siblings."
+        user.save()
+        modellog_record = ModelLog.objects.latest('datetime')
+        self.assertTrue(modellog_record.object_description, "Update: <user: zeus>")
+
+        user.delete()
+        modellog_record = ModelLog.objects.latest('datetime')
+
+        self.assertTrue(modellog_record.object_description, "Delete: <user: zeus>")
+
+        self.client.get("/login/")
+        modellog_record = ModelLog.objects.latest('datetime')
+        httplog_record = HttpRequestLogRecord.objects.latest('datetime')
+        self.assertTrue(modellog_record.content_object, httplog_record)
+        self.assertTrue(modellog_record.object_description, "Create: <http request log record: /login/>")
 
 
 class TestProjectWindmillTest(djangotest.WindmillDjangoUnitTest):
