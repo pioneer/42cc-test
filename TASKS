@@ -40,3 +40,8 @@
 2010.03.06      Create failing test                                     12:03 - 12:33
 2010.03.07      Add signals                                             23:13 - 0:01
                 Fix command test, debugging signals                     0:02 - 0:39
+2010.03.08 #11  Create failing test                                     11:06 - 12:00
+                Add ajax to form, split templates, refactor views,      12:10 - 15:07
+                disable fields after submit,
+                add loading state indicator,
+                add countdown to improve usability, test improvements
