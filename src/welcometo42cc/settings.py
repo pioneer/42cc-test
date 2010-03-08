@@ -102,6 +102,8 @@ INSTALLED_APPS = (
     'windmill'
 )
 
+AJAX_FORM_COUNTDOWN_TIME = 10
+
 TEST_RUNNER = 'django-test-coverage.runner.run_tests'
 
 # Dependency checker functionality.  Gives our users nice errors when they start
