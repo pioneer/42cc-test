@@ -10,6 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
      url(r'^$', 'common.views.homepage'),
      url(r'^form/$', 'common.views.userform', name="userform"),
+     url(r'^form/ajax/$', 'common.views.userform_ajax', name="userform_ajax"),
      url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name="login"),
      url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': settings.LOGIN_URL}, name="logout"),
 

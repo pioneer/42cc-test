@@ -102,6 +102,7 @@ INSTALLED_APPS = (
     'windmill'
 )
 
+# Do not set < 6 seconds due to windmill could not run test faster
 AJAX_FORM_COUNTDOWN_TIME = 10
 
 TEST_RUNNER = 'django-test-coverage.runner.run_tests'

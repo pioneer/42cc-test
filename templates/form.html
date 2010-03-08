@@ -3,6 +3,7 @@
 {% block extra_js %}
 <script src="/static/js/jquery-1.4.2.min.js"></script>
 <script src="/static/js/jquery-ui-1.7.2.custom.min.js"></script>
+<script src="/static/js/jquery.form.js"></script>
 
 <script type="text/javascript">
 $.datepicker.setDefaults({
@@ -10,8 +11,33 @@ $.datepicker.setDefaults({
     duration: 'fast',
     showAnim: 'fadeIn'
 });
+var options = {
+    beforeSubmit: disableFields,
+    success: enableFields,
+    target: "#userform_table",
+    url: "{% url userform_ajax %}"
+    
+};
+function disableFields(formData, jqForm, options) {
+    jqForm.find("input[type=submit],input[type=text],textarea").attr("disabled", "disabled");
+    $("#ajax_loader").show();
+    setTimeout(countdown, 1000);
+    return true;
+};
+function enableFields(responseText, statusText, xhr, $form) {
+    $form.find("input[type=submit],input[type=text],textarea").removeAttr("disabled");
+    $("#ajax_loader").hide();
+};
+var i={{ countdown_time }} - 1;
+function countdown(){
+    $("#seconds").html(i);
+    $("#plural").html(i!=1 ? "s" : "");
+    i -= 1;
+    if(i>0) setTimeout(countdown, 1000);
+};
 $(function() {
     $("#id_birthdate").datepicker();
+    $("#userform").ajaxForm(options);
 });
 </script>
 {% endblock %}
@@ -21,10 +47,13 @@ $(function() {
 {% endblock %}
 
 {% block content %}
-<form method="post" action="{% url userform %}">
-<table>
-{{ form }}
+<p>
+<a href="/">View this info</a>
+</p>
+<form id="userform" method="post" action="{% url userform %}">
+<table id="userform_table">
+{% include "form_data.html" %}
 </table>
-<input type="submit" value="Save" />
+<input id="id_submit" type="submit" value="Save" /><div id="ajax_loader" style="display:none"><img src="/static/images/ajax-loader.gif" /><i>Waiting <span id="seconds">{{ countdown_time }}</span> second<span id="plural">s</span> &hellip;</i></div>
 </form>
 {% endblock %}
