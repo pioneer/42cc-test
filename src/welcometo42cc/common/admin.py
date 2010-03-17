@@ -14,6 +14,7 @@ class HttpRequestLogRecordAdmin(admin.ModelAdmin):
 
 admin.site.register(HttpRequestLogRecord, HttpRequestLogRecordAdmin)
 
+
 class ModelLogAdmin(admin.ModelAdmin):
     pass
 

@@ -36,7 +36,7 @@ def html5_parse_and_get_form_tags(s):
             form_tags.append(tag)
         if tag.startswith("<textarea"):
             form_tags.append("%s%s%s" % (tag, tags.next(), tags.next()))
-    
+
     return form_tags
 
 
@@ -57,7 +57,8 @@ class WelcomeTo42CcTest(unittest.TestCase):
         self.assertTrue("Serge Tarkovski" in response.content)
         self.assertTrue("serge.tarkovski@gmail.com" in response.content)
         self.assertTrue("Cell phone: +380-63-192-4340" in response.content)
-        self.assertTrue("Pinocchio is a fictional character that" in response.content)
+        self.assertTrue("Pinocchio is a fictional character that" in\
+                        response.content)
 
     def test_login(self):
         self.client.logout()
@@ -65,15 +66,20 @@ class WelcomeTo42CcTest(unittest.TestCase):
         response = self.client.get('/login/')
         self.failUnlessEqual(response.status_code, 200)
 
-        response = self.client.post('/login/', {'username': 'pioneer', 'password': '123'})
+        response = self.client.post('/login/', {'username': 'pioneer',\
+                                                'password': '123'})
         self.failUnlessEqual(response.status_code, 200)
-        self.assertTrue("Your username and password didn't match. Please try again." in response.content)
+        self.assertTrue("Your username and password didn't match. " +\
+                        "Please try again." in response.content)
 
-        response = self.client.post('/login/', {'username': 'abc', 'password': '123456'})
+        response = self.client.post('/login/', {'username': 'abc',\
+                                                'password': '123456'})
         self.failUnlessEqual(response.status_code, 200)
-        self.assertTrue("Your username and password didn't match. Please try again." in response.content)
+        self.assertTrue("Your username and password didn't match. " +
+                        "Please try again." in response.content)
 
-        response = self.client.post('/login/', {'username': 'pioneer', 'password': '123456'})
+        response = self.client.post('/login/', {'username': 'pioneer',\
+                                                'password': '123456'})
         self.failUnlessEqual(response.status_code, 302)
 
         response = self.client.get('/')
@@ -103,7 +109,8 @@ class WelcomeTo42CcTest(unittest.TestCase):
         self.failUnlessEqual(record.method, "GET")
         self.failUnlessEqual(record.status_code, 200)
 
-        response = self.client.post('/login/', {'username': 'pioneer', 'password': '123456'})
+        response = self.client.post('/login/', {'username': 'pioneer',\
+                                                'password': '123456'})
 
         record = HttpRequestLogRecord.objects.get_last_record()
         self.failUnlessEqual(record.url, "/login/")
@@ -134,7 +141,8 @@ class WelcomeTo42CcTest(unittest.TestCase):
             settings = None
 
         self.failIfEqual(settings, None)
-        self.failUnlessEqual(settings.SECRET_KEY, "(##miaswe4+szpto%a9jku&b+=5v1y@63r%y%i37qk97hzvlzn")
+        self.failUnlessEqual(settings.SECRET_KEY,\
+                          "(##miaswe4+szpto%a9jku&b+=5v1y@63r%y%i37qk97hzvlzn")
         self.failUnlessEqual(settings.ROOT_URLCONF, "welcometo42cc.urls")
 
     def test_form_and_reverse_order(self):
@@ -153,7 +161,8 @@ class WelcomeTo42CcTest(unittest.TestCase):
         self.assertFalse(any(t.startswith("<form") for t in form_tags[1:-1]))
         self.assertFalse(any(t == "</form>" for t in form_tags[1:-1]))
 
-        self.assertTrue("action=/form/" in form_tags[0] or "action=." in form_tags[0])
+        self.assertTrue("action=/form/" in form_tags[0] or "action=." in\
+                        form_tags[0])
 
         def is_input(tag, name, value):
             return tag.startswith("<input") and "name=%s" % name in tag \
@@ -161,20 +170,25 @@ class WelcomeTo42CcTest(unittest.TestCase):
                    and "value=%s" % value in tag
 
         def is_textarea(tag, name, value):
-            return tag.startswith("<textarea") and tag.endswith("</textarea>") \
+            return tag.startswith("<textarea") and tag.endswith("</textarea>")\
                    and "name=%s" % name in tag and value in tag
 
         self.assertTrue(is_input(form_tags[6], "first_name", "Serge"))
         self.assertTrue(is_input(form_tags[5], "last_name", "Tarkovski"))
         self.assertTrue(is_input(form_tags[4], "birthdate", "1980-06-15"))
-        self.assertTrue(is_textarea(form_tags[3], "biography", "Pinocchio is a fictional character that"))
-        self.assertTrue(is_input(form_tags[2], "email", "serge.tarkovski@gmail.com"))
-        self.assertTrue(is_textarea(form_tags[1], "contacts", "Cell phone: +380-63-192-4340"))
+        self.assertTrue(is_textarea(form_tags[3], "biography",\
+                                    "Pinocchio is a fictional character that"))
+        self.assertTrue(is_input(form_tags[2], "email",\
+                                 "serge.tarkovski@gmail.com"))
+        self.assertTrue(is_textarea(form_tags[1], "contacts",\
+                                    "Cell phone: +380-63-192-4340"))
 
         response = self.client.post('/form/', {'first_name': 'Vasya', \
                                                'last_name': 'Pupkin', \
                                                'birthdate': '1970-01-01', \
-                                               'biography': 'The ancestor of the Pupkin\'s genus was a viking jarl Pupkur, who came to Russia in ancient times.', \
+                                               'biography':\
+        'The ancestor of the Pupkin\'s genus was a viking jarl Pupkur, who ' +\
+        'came to Russia in ancient times.', \
                                                'email': 'pupkin@pupkin.ru', \
                                                'contacts': 'Use rails'})
         self.failUnlessEqual(response.status_code, 302)
@@ -201,9 +215,13 @@ class WelcomeTo42CcTest(unittest.TestCase):
         response = self.client.post('/form/', {'first_name': 'Serge', \
                                                'last_name': 'Tarkovski', \
                                                'birthdate': '1980-06-15', \
-                                               'biography': 'Pinocchio is a fictional character that first appeared in 1883, in The Adventures of Pinocchio by Carlo Collodi.', \
-                                               'email': 'serge.tarkovski@gmail.com', \
-                                               'contacts': 'Cell phone: +380-63-192-4340'})
+                                               'biography': \
+        'Pinocchio is a fictional character that first appeared in 1883, ' +\
+        'in The Adventures of Pinocchio by Carlo Collodi.', \
+                                               'email':\
+                                               'serge.tarkovski@gmail.com', \
+                                               'contacts':\
+                                               'Cell phone: +380-63-192-4340'})
         self.failUnlessEqual(response.status_code, 302)
 
     def test_edit_tag(self):
@@ -213,17 +231,17 @@ class WelcomeTo42CcTest(unittest.TestCase):
         except ImportError:
             import_edit_tag = False
         self.assertTrue(import_edit_tag)
-        
+
         response = self.client.get('/')
         self.failUnlessEqual(response.status_code, 302)
 
         self.client.login(username='pioneer', password='123456')
         response = self.client.get('/')
-        
+
         from django.template.loaders.filesystem import load_template_source
-        
+
         template_content = load_template_source(response.template[0].name)[0]
-        
+
         self.assertTrue("{% load edit_tags %}" in template_content)
         self.assertTrue("{% edit_object u %}" in template_content)
         self.assertTrue("/admin/auth/user/1/" in response.content)
@@ -239,51 +257,57 @@ class WelcomeTo42CcTest(unittest.TestCase):
         output = capturedout.getvalue()
 
         MODEL_STATS_OUTPUT = ["model: ContentType, objects in database: 10",
-                             "model: Permission, objects in database: 30",
-                             "model: Group, objects in database: 0",
-                             "model: Message, objects in database: 0",
-                             "model: Site, objects in database: 1",
-                             "model: LogEntry, objects in database: 0",
-                             "model: HttpRequestLogRecord, objects in database: 0"]
-        
+                         "model: Permission, objects in database: 30",
+                         "model: Group, objects in database: 0",
+                         "model: Message, objects in database: 0",
+                         "model: Site, objects in database: 1",
+                         "model: LogEntry, objects in database: 0",
+                         "model: HttpRequestLogRecord, objects in database: 0"]
+
         MODEL_STATS_OUTPUT_VARIANT = [("model: User, objects in database: 1",
-                                       "model: User, objects in database: 10"),
-                                      ("model: Session, objects in database: 0",
-                                       "model: Session, objects in database: 3"),
-                                      ("model: ModelLog, objects in database: 42",
-                                       "model: ModelLog, objects in database: 60")]
+                                   "model: User, objects in database: 10"),
+                                  ("model: Session, objects in database: 0",
+                                   "model: Session, objects in database: 3"),
+                                  ("model: ModelLog, objects in database: 42",
+                                   "model: ModelLog, objects in database: 60")]
 
         for line in MODEL_STATS_OUTPUT:
             self.assertTrue(line in output)
-        
+
         for items in MODEL_STATS_OUTPUT_VARIANT:
             self.assertTrue(any(line in output for line in items))
 
     def test_signals(self):
-        user = User.objects.create_user("zeus", "thunderbolt@olympus.heaven", "chronos")
+        user = User.objects.create_user("zeus", "thunderbolt@olympus.heaven",\
+                                        "chronos")
         modellog_record = ModelLog.objects.latest('datetime')
         self.assertTrue(modellog_record.content_object, user)
 
-        user.biography = "Zeus was the child of Cronus and Rhea, and the youngest of his siblings."
+        user.biography = "Zeus was the child of Cronus and Rhea, and the " +\
+                         "youngest of his siblings."
         user.save()
         modellog_record = ModelLog.objects.latest('datetime')
-        self.assertTrue(modellog_record.object_description, "Update: <user: zeus>")
+        self.assertTrue(modellog_record.object_description,\
+                        "Update: <user: zeus>")
 
         user.delete()
         modellog_record = ModelLog.objects.latest('datetime')
 
-        self.assertTrue(modellog_record.object_description, "Delete: <user: zeus>")
+        self.assertTrue(modellog_record.object_description,\
+                        "Delete: <user: zeus>")
 
         self.client.get("/login/")
         modellog_record = ModelLog.objects.latest('datetime')
         httplog_record = HttpRequestLogRecord.objects.latest('datetime')
         self.assertTrue(modellog_record.content_object, httplog_record)
-        self.assertTrue(modellog_record.object_description, "Create: <http request log record: /login/>")
+        self.assertTrue(modellog_record.object_description,\
+                        "Create: <http request log record: /login/>")
 
 
 class TestProjectWindmillTest(djangotest.WindmillDjangoUnitTest):
     """
     Windmill tests for the project
     """
-    test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'wmtests')
+    test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),\
+                            'wmtests')
     browser = 'firefox'
