@@ -5,5 +5,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def edit_user(user):
-    return reverse('admin:auth_user_change', args=(user.id,))
+def edit_object(obj):
+    return reverse('admin:%s_%s_change' % (obj._meta.app_label,\
+                                           obj._meta.module_name),\
+                                           args=(obj.id,))
