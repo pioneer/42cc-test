@@ -39,32 +39,38 @@ class ModelLog(models.Model):
         ('U', 'Update'),
         ('D', 'Delete')
     )
-    
+
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
-    
+
     object_description = models.CharField(max_length=255)
     action = models.CharField(max_length=1, choices=ACTIONS)
     datetime = models.DateTimeField(auto_now_add=True)
-    
+
     def __unicode__(self):
-        return "%s: <%s: %s>" % (self.get_action_display(), self.content_type, self.object_description)
+        return "%s: <%s: %s>" % (self.get_action_display(), self.content_type,\
+                                 self.object_description)
 
 
 def process_model_pre_change(sender, **kwargs):
     instance = kwargs['instance']
-    if not isinstance(instance, ModelLog): # Do not record ModelLog changes to avoid recursion
-        instance._modellog_action = "C" if not getattr(instance, 'pk', None) else "U"
+    if not isinstance(instance, ModelLog): # Do not record ModelLog changes to
+                                           # avoid recursion
+        instance._modellog_action = "C" if not getattr(instance, 'pk', None)\
+                                        else "U"
 
 
 def process_model_post_change(sender, **kwargs):
     instance = kwargs['instance']
     action = getattr(instance, '_modellog_action', None)
     if not isinstance(instance, ModelLog) and action in ("C", "U") \
-       and type(instance.pk) == int: # Avoid logging objects such as django.contrib.sessions.models.Session,
-                                     # due to it is hard to maintain non-int primary keys with contenttypes framework,
-                                     # taking into account current simple educational task
+       and type(instance.pk) == int: # Avoid logging objects such as
+                                     # django.contrib.sessions.models.Session,
+                                     # due to it is hard to maintain non-int
+                                     # primary keys with contenttypes
+                                     # framework, taking into account current
+                                     # simple educational task
         ModelLog.objects.create(content_object=instance, action=action,\
                                 object_description=unicode(instance))
 

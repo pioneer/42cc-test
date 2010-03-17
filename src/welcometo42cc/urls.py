@@ -11,8 +11,10 @@ urlpatterns = patterns('',
      url(r'^$', 'common.views.homepage'),
      url(r'^form/$', 'common.views.userform', name="userform"),
      url(r'^form/ajax/$', 'common.views.userform_ajax', name="userform_ajax"),
-     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name="login"),
-     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': settings.LOGIN_URL}, name="logout"),
+     url(r'^login/$', 'django.contrib.auth.views.login', \
+         {'template_name': 'login.html'}, name="login"),
+     url(r'^logout/$', 'django.contrib.auth.views.logout', \
+         {'next_page': settings.LOGIN_URL}, name="logout"),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
@@ -25,6 +27,8 @@ urlpatterns = patterns('',
 # static urls will be disabled in production mode
 urlpatterns += patterns(
     '',
-    url(r'^static/(.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    url(r'^admin-media/(.*)$', 'django.views.static.serve', {'document_root': op.join(op.dirname(admin.__file__), 'media')}),
+    url(r'^static/(.*)$', 'django.views.static.serve', \
+        {'document_root': settings.STATIC_ROOT}),
+    url(r'^admin-media/(.*)$', 'django.views.static.serve', \
+        {'document_root': op.join(op.dirname(admin.__file__), 'media')}),
 )

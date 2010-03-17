@@ -16,12 +16,15 @@ MANAGERS = ADMINS
 
 REVISION = 'dev'
 
-DATABASE_ENGINE = ''           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_ENGINE = ''           # 'postgresql_psycopg2', 'postgresql',
+                               # 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = ''             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASE_HOST = ''             # Set to empty string for localhost.
+                               # Not used with sqlite3.
+DATABASE_PORT = ''             # Set to empty string for default. Not used
+                               # with sqlite3.
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -86,7 +89,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 ROOT_URLCONF = 'welcometo42cc.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here, like "/home/html/django_templates" or
+    # "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     TEMPLATE_DIR,
@@ -107,8 +111,8 @@ AJAX_FORM_COUNTDOWN_TIME = 10
 
 TEST_RUNNER = 'django-test-coverage.runner.run_tests'
 
-# Dependency checker functionality.  Gives our users nice errors when they start
-# out, instead of encountering them later on.  Most of the magic for this
+# Dependency checker functionality.  Gives our users nice errors when they
+# start out, instead of encountering them later on.  Most of the magic for this
 # happens in manage.py, not here.
 install_help = """
 Please see installation instruction

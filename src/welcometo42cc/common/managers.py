@@ -5,6 +5,7 @@ class HttpRequestLogRecordManager(models.Manager):
     """
     Custom manager that adds getting last record functionality
     """
+
     def get_last_record(self):
         """
         Get last HTTP record

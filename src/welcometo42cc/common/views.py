@@ -13,8 +13,10 @@ from common.forms import UserForm
 def get_user(request):
     user = request.user
     if not user.is_authenticated():
-        user = get_object_or_none(User, email="serge.tarkovski@gmail.com") or request.user
+        user = get_object_or_none(User, email="serge.tarkovski@gmail.com") \
+        or request.user
     return user
+
 
 @login_required
 @render_to('homepage.html')
@@ -23,6 +25,7 @@ def homepage(request):
     Home page view
     """
     return {'u': get_user(request)}
+
 
 def userform_(request):
     user = get_user(request)
@@ -35,6 +38,7 @@ def userform_(request):
     else:
         form = UserForm(instance=user)
     return form
+
 
 @login_required
 @render_to('form.html')
@@ -55,6 +59,7 @@ def userform_ajax(request):
     A view to edit info from homepage, AJAX
     """
     if request.method == "POST":
-        from time import sleep; sleep(settings.AJAX_FORM_COUNTDOWN_TIME)
+        from time import sleep
+        sleep(settings.AJAX_FORM_COUNTDOWN_TIME)
     form = userform_(request)
     return {'form': form}
